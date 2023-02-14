@@ -1,7 +1,4 @@
 streamlit
-re
-os
-request
+requests
 lxml
-time
 tqdm
