@@ -58,7 +58,7 @@ else:
         file=os.getcwd()
         finally_file=os.path.join(file, f'{name_chinese}.txt')
         st.write(f"小说已经下载完成，存放在{finally_file}")
-        novel=open(f'./{name_chinese}.txt','r',encoding='utf-8')
+        novel=open(f'.\{name_chinese}.txt','r',encoding='utf-8')
         st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
     except:
         st.write(f"当前书城并没有收录该小说,网址为{novel_url},可查看")
