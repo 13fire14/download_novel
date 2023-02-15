@@ -139,7 +139,6 @@ def novel_paqu_again(name):
 #获取小说所属类别
     novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
     author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
-    st.write(author)
 #获取小说第一章节网址
     url_all=re.findall('<li>.*<a href="(.*)" title=.*</a>',resp.text)
     url=url_all[0]
@@ -220,11 +219,11 @@ else:
                     with open(f'.\{name_chinese}-1.txt','w',encoding='utf-8') as f:
                         f.close()
                     download,time_all_waste,novel_class,author=novel_paqu_again(name)
-                    user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']
+                    user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}',f'{author}']
                     data_load(user_data)
         else:
             download,time_all_waste,novel_class,author=novel_paqu(name)
-            user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']
+            user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}',f'{author}']
             data_load(user_data)
     
         
