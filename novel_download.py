@@ -56,7 +56,7 @@ for i in novel_list1:
         if '.txt' in i:
             if 'user_data' not in i:
                 novel_chandle.append(i)
-                # os.remove(os.path.join(file1, i))
+                os.remove(os.path.join(file1, i))
 st.sidebar.dataframe(novel_chandle)
 #%%编写爬取的函数
 def novel_paqu(name):
@@ -111,6 +111,7 @@ def novel_paqu(name):
         st.write(download)
         time_all_waste=0
         novel_class=''
+        os.remove(os.path.join(file1,f'.\{name_chinese}.txt' ))
     return download,time_all_waste,novel_class
 #%%重新下载
 def novel_paqu_again(name):
