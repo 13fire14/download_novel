@@ -139,6 +139,7 @@ def novel_paqu_again(name):
 #获取小说所属类别
     novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
     author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
+    st.write(author)
 #获取小说第一章节网址
     url_all=re.findall('<li>.*<a href="(.*)" title=.*</a>',resp.text)
     url=url_all[0]
