@@ -8,9 +8,13 @@ import re
 from tqdm import tqdm
 import os           #获取服务器的小说
 import pinyin as py#中文改为拼音
+import getpass
+
 
 st.set_page_config(page_title='小说免费下载平台')
 st.title('小说免费下载平台')
+str1 = getpass.getuser()
+st.write(str1)
 # st.subheader("长篇小说需要一定的下载时间，请耐心等候")
 #%%先将储存库中所有小说清空
 novel_list1=os.listdir()
