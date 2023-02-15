@@ -56,7 +56,7 @@ def novel_paqu(name):
                 f.write(title+'\n\n'+info+'\n\n')
         file=os.getcwd()
         finally_file=os.path.join(file, f'{name_chinese}.txt')
-        st.write(f"小说已经下载完成，存放在{finally_file}")
+        st.write(f"小说已经下载完成")
         novel=open(f'.\{name_chinese}.txt','r',encoding='utf-8')
         st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
     except:
@@ -92,7 +92,7 @@ def novel_paqu_again(name):
             f.write(title+'\n\n'+info+'\n\n')
     file=os.getcwd()
     finally_file=os.path.join(file, f'{name_chinese}-1.txt')
-    st.write(f"小说已经下载完成，存放在{finally_file}")
+    st.write(f"小说已经下载完成")
     novel=open(f'.\{name_chinese}-1.txt','r',encoding='utf-8')
     st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
 
@@ -106,7 +106,7 @@ else:
     #已经获取到小说名字————先判断是否已经有了，有了的话可直接提供下载到本地，也可选择继续下载，建议继续下载
     novel_list=os.listdir()
     if f'.\{name_chinese}.txt' in novel_list:
-        st.write('yes')
+        #st.write('yes')
         st.write('当前平台已收录此小说，是否选择直接下载(如果是正在更新的小说，建议重新下载)')
         col1,col2=st.columns(2)
         with col1:
@@ -122,5 +122,5 @@ else:
                     f.close()
                 novel_paqu_again(name)
     else:
-        st.write('no')
+        #st.write('no')
         novel_paqu(name)
