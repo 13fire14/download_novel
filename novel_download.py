@@ -52,10 +52,11 @@ novel_list1=os.listdir()
 file1=os.getcwd()
 novel_chandle=[]
 for i in novel_list1:
-    if ('requirements'and'user_data') not in i:
+    if 'requirements' not in i:
         if '.txt' in i:
-            novel_chandle.append(i)
-            # os.remove(os.path.join(file1, i))
+            if 'user_data' not in i:
+                novel_chandle.append(i)
+                # os.remove(os.path.join(file1, i))
 st.sidebar.dataframe(novel_chandle)
 #%%编写爬取的函数
 def novel_paqu(name):
