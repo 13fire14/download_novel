@@ -55,22 +55,22 @@ novel_chandle=[]
 for i in novel_list1:
     if 'requirements' not in i:
         if '.txt' in i:
-            # if 'user_data' not in i:
-            novel_chandle.append(i)
-            os.remove(os.path.join(file1, i))
+            if 'user_data' not in i:
+                novel_chandle.append(i)
+                os.remove(os.path.join(file1, i))
 st.sidebar.dataframe(novel_chandle)
 #%%仅运行一次输入表头
-columns=['登陆时间','书名','消耗时长','是否下载','所属类别','作者']
-for j in range(len(columns)):
-    if j ==len(columns)-1:
-        with open('./user_data.txt','a',encoding='utf-8')as f:
-            f.write(columns[j])
-            f.write('\n')
-    else:
-        with open('./user_data.txt','a',encoding='utf-8')as f:
-            f.write(columns[j])
-            f.write(',')
-#%%编写爬取的函数
+# columns=['登陆时间','书名','消耗时长','是否下载','所属类别','作者']
+# for j in range(len(columns)):
+#     if j ==len(columns)-1:
+#         with open('./user_data.txt','a',encoding='utf-8')as f:
+#             f.write(columns[j])
+#             f.write('\n')
+#     else:
+#         with open('./user_data.txt','a',encoding='utf-8')as f:
+#             f.write(columns[j])
+#             f.write(',')
+# #%%编写爬取的函数
 def novel_paqu(name):
     #计算总的时间
     time_now_all=time.time()
