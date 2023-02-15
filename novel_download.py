@@ -103,7 +103,7 @@ else:
     name=py.get(name_chinese,format='strip')
     #已经获取到小说名字————先判断是否已经有了，有了的话可直接提供下载到本地，也可选择继续下载，建议继续下载
     novel_list=os.listdir()
-    if f'{name_chinese}.txt' in novel_list:
+    if f'.\{name_chinese}.txt' in novel_list:
         st.write('yes')
         st.write('当前平台已收录此小说，是否选择直接下载(如果是正在更新的小说，建议重新下载)')
         col1,col2=st.columns(2)
