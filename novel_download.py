@@ -90,6 +90,7 @@ def novel_paqu(name):
         st.write(f"当前书城并没有收录该小说,网址为{novel_url},可查看")
         st.write(download)
         time_all_waste=0
+        novel_class=''
     return download,time_all_waste,novel_class
 #%%重新下载
 def novel_paqu_again(name):
