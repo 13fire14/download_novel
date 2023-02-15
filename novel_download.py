@@ -180,5 +180,5 @@ else:
     st.dataframe(data)
 file=os.getcwd()
 finally_file=os.path.join(file, '/用户数据.xlsx')
-df=pd.read_excel(finally_file)
+df=pd.read_excel('用户数据.xlsx')
 st.dataframe(df)
