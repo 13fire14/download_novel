@@ -36,7 +36,8 @@ utc_now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
 beijing_now = utc_now.astimezone(SHA_TZ)
 time_login=beijing_now.strftime('%Y-%m-%d %H:%M:%S')
 st.write(f'当前登陆时间为：{time_login}')
-#%%数据上传
+
+            #%%数据上传
 def data_load(user_data):
     for i in range(len(user_data)):
         if i ==len(user_data)-1:
@@ -54,10 +55,21 @@ novel_chandle=[]
 for i in novel_list1:
     if 'requirements' not in i:
         if '.txt' in i:
-            if 'user_data' not in i:
-                novel_chandle.append(i)
-                #os.remove(os.path.join(file1, i))
+            # if 'user_data' not in i:
+            novel_chandle.append(i)
+            os.remove(os.path.join(file1, i))
 st.sidebar.dataframe(novel_chandle)
+#%%仅运行一次输入表头
+columns=['登陆时间','书名','消耗时长','是否下载','所属类别','作者']
+for j in range(len(columns)):
+    if j ==len(columns)-1:
+        with open('./user_data.txt','a',encoding='utf-8')as f:
+            f.write(columns[j])
+            f.write('\n')
+    else:
+        with open('./user_data.txt','a',encoding='utf-8')as f:
+            f.write(columns[j])
+            f.write(',')
 #%%编写爬取的函数
 def novel_paqu(name):
     #计算总的时间
@@ -72,6 +84,7 @@ def novel_paqu(name):
         e=etree.HTML(resp.text)
     #获取小说所属类别
         novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
+        author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
         url_all=re.findall('<li>.*<a href="(.*)" title=.*</a>',resp.text)
         url=url_all[0]
         st.subheader("当前书城中存在此小说，正在下载")
@@ -111,11 +124,11 @@ def novel_paqu(name):
         st.write(download)
         time_all_waste=0
         novel_class=''
-        os.remove(os.path.join(file1,f'.\{name_chinese}.txt' ))
-    return download,time_all_waste,novel_class
+    return download,time_all_waste,novel_class,author
 #%%重新下载
 def novel_paqu_again(name):
     time_now_all=time.time()
+    name='douluodalu'
     novel_url=f'https://www.51shucheng.net/{name}'
     headers={
         'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
@@ -124,6 +137,7 @@ def novel_paqu_again(name):
     e=etree.HTML(resp.text)
 #获取小说所属类别
     novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
+    author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
 #获取小说第一章节网址
     url_all=re.findall('<li>.*<a href="(.*)" title=.*</a>',resp.text)
     url=url_all[0]
@@ -156,7 +170,7 @@ def novel_paqu_again(name):
     novel=open(f'.\{name_chinese}-1.txt','r',encoding='utf-8')
     time_all_waste=round(time.time()-time_now_all,0)
     st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
-    return download,time_all_waste,novel_class
+    return download,time_all_waste,novel_class,author
 #%%页面设置
 name_chinese=st.text_input('请输入小说名称')
 # name_chinese='天龙八部'
@@ -195,17 +209,18 @@ else:
                     e=etree.HTML(resp.text)
                 #获取小说所属类别
                     novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
-                    user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']
+                    author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
+                    user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}',f'{author}']
                     data_load(user_data)
             with col2:
                 if st.button('重新下载'):
                     with open(f'.\{name_chinese}-1.txt','w',encoding='utf-8') as f:
                         f.close()
-                    download,time_all_waste,novel_class=novel_paqu_again(name)
+                    download,time_all_waste,novel_class,author=novel_paqu_again(name)
                     user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']
                     data_load(user_data)
         else:
-            download,time_all_waste,novel_class=novel_paqu(name)
+            download,time_all_waste,novel_class,author=novel_paqu(name)
             user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']
             data_load(user_data)
     
