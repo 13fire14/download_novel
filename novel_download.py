@@ -124,11 +124,12 @@ def novel_paqu(name):
         st.write(download)
         time_all_waste=0
         novel_class=''
+        author=''
     return download,time_all_waste,novel_class,author
 #%%重新下载
 def novel_paqu_again(name):
     time_now_all=time.time()
-    name='douluodalu'
+    #name='liulangdiqiu'
     novel_url=f'https://www.51shucheng.net/{name}'
     headers={
         'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
