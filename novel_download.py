@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Feb 15 14:19:06 2023
+
+@author: bianca
+"""
+
+#%%app代码存放处
+# -*- coding: utf-8 -*-
+
 #%% 爬取小说平台
 #导入库
 import streamlit as st
@@ -16,7 +26,7 @@ st.title('小说免费下载平台')
 #%%获取登陆时间
 t=time.gmtime()
 time_login=time.strftime("%Y-%m-%d %H:%M:%S",t)
-st.write(f'当前登陆时间为：{time_login}')
+#st.write(f'当前登陆时间为：{time_login}')
 #%% 获取下载时长
 #%%先将储存库中所有小说清空
 novel_list1=os.listdir()
@@ -66,7 +76,7 @@ def novel_paqu(name):
             st.sidebar.write(f'{i+1}/{len(url_all)}:{title},耗时{time_waste}秒')
         file=os.getcwd()
         finally_file=os.path.join(file, f'{name_chinese}.txt')
-        st.write(f"小说已经下载完成，存放在{finally_file}")
+        #st.write(f"小说已经下载完成，存放在{finally_file}")
         novel=open(f'.\{name_chinese}.txt','r',encoding='utf-8')
         st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
         download=1
@@ -112,7 +122,7 @@ def novel_paqu_again(name):
         st.sidebar.write(f'{i+1}/{len(url_all)}:{title},耗时{time_waste}秒')
     file=os.getcwd()
     finally_file=os.path.join(file, f'{name_chinese}-1.txt')
-    st.write(f"小说已经下载完成，存放在{finally_file}")
+    #st.write(f"小说已经下载完成，存放在{finally_file}")
     novel=open(f'.\{name_chinese}-1.txt','r',encoding='utf-8')
     time_all_waste=round(time.time()-time_now_all,0)
     st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
@@ -157,4 +167,4 @@ else:
          
          }
     data=pd.DataFrame(user_data)
-    st.dataframe(data)
+    #st.dataframe(data)
