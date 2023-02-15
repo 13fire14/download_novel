@@ -3,4 +3,4 @@ requests
 lxml
 tqdm
 pinyin
-win32
+pywin32
