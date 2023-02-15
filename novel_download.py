@@ -37,7 +37,7 @@ for i in novel_list1:
         if '.txt' in i:
             novel_chandle.append(i)
             # os.remove(os.path.join(file1, i))
-st.sidebar.dataframe(novel_chandle)
+#st.sidebar.dataframe(novel_chandle)
 #%%编写爬取的函数
 def novel_paqu(name):
     #计算总的时间
@@ -179,6 +179,6 @@ else:
     data=pd.DataFrame(user_data)
     st.dataframe(data)
 
-    df=pd.read_excel('./用户数据.xlsx')
-    df=df.append(user_data,ignore_index=True)
-    df.to_excel('./用户数据.xlsx')
+    #df=pd.read_excel('./用户数据.xlsx')
+    #df=df.append(user_data,ignore_index=True)
+    #df.to_excel('./用户数据.xlsx')
