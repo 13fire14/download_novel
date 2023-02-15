@@ -171,7 +171,7 @@ else:
          '登陆时间':[f'{time_login}'],
          '搜索书名':[f'{name_chinese}'],
          '下载总时长':[f'{time_all_waste}'],
-         '下载情况':[f'{download}']
+         '下载情况':[f'{download}'],
          '所属类别':[f'{novel_class}']
          }
     data=pd.DataFrame(user_data)
