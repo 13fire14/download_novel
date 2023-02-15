@@ -22,7 +22,8 @@ for i in novel_list1:
             novel_chandle.append(i)
             #一键清除所有小说内存
             #os.remove(os.path.join(file1, i))
-st.sidebar.write(novel_chandle)
+st.sidebar.subheader('当前书城已下载小说目录')
+st.sidebar.dataframe(novel_chandle)
 #%%编写爬取的函数
 def novel_paqu(name):
     novel_url=f'https://www.51shucheng.net/{name}'
