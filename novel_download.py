@@ -178,5 +178,4 @@ else:
          }
     data=pd.DataFrame(user_data)
     st.dataframe(data)
-df=pd.read_excel('.\用户数据.xlsx')
-st.dataframe(df)
+st.write(os.getcwd())
