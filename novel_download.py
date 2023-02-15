@@ -56,7 +56,7 @@ for i in novel_list1:
         if '.txt' in i:
             if 'user_data' not in i:
                 novel_chandle.append(i)
-                os.remove(os.path.join(file1, i))
+                #os.remove(os.path.join(file1, i))
 st.sidebar.dataframe(novel_chandle)
 #%%编写爬取的函数
 def novel_paqu(name):
