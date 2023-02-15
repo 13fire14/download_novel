@@ -24,10 +24,29 @@ st.set_page_config(page_title='小说免费下载平台')
 st.title('小说免费下载平台')
 # st.subheader("长篇小说需要一定的下载时间，请耐心等候")
 #%%获取登陆时间
-t=time.gmtime()
-time_login=time.strftime("%Y-%m-%d %H:%M:%S",t)
-#st.write(f'当前登陆时间为：{time_login}')
-#%% 获取下载时长
+import datetime
+ 
+SHA_TZ = datetime.timezone(
+    datetime.timedelta(hours=8),
+    name='Asia/Shanghai',
+)
+ 
+# 协调世界时
+utc_now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+beijing_now = utc_now.astimezone(SHA_TZ)
+time_login=beijing_now.strftime('%Y-%m-%d %H:%M:%S')
+st.write(f'当前登陆时间为：{time_login}')
+#%%数据上传
+def data_load(user_data):
+    for i in range(len(user_data)):
+        if i ==len(user_data)-1:
+            with open('./user_data.txt','a',encoding='utf-8')as f:
+                f.write(user_data[i])
+                f.write('\n')
+        else:
+            with open('./user_data.txt','a',encoding='utf-8')as f:
+                f.write(user_data[i])
+                f.write(',')
 #%%先将储存库中所有小说清空
 novel_list1=os.listdir()
 file1=os.getcwd()
@@ -37,7 +56,7 @@ for i in novel_list1:
         if '.txt' in i:
             novel_chandle.append(i)
             # os.remove(os.path.join(file1, i))
-#st.sidebar.dataframe(novel_chandle)
+st.sidebar.dataframe(novel_chandle)
 #%%编写爬取的函数
 def novel_paqu(name):
     #计算总的时间
@@ -145,40 +164,48 @@ novel_class=''
 if name_chinese=='':
     st.write('积累的年代，就安然等待吧。不要焦虑，不要迷茫。时人不识凌云木，直待凌云始道高')
 else:
-    name=py.get(name_chinese,format='strip')
-    #已经获取到小说名字————先判断是否已经有了，有了的话可直接提供下载到本地，也可选择继续下载，建议继续下载
-    novel_list=os.listdir()
-    if f'.\{name_chinese}.txt' in novel_list:
-        # print('yes')
-        download=1
-        st.write('当前平台已收录此小说，是否选择直接下载(如果是正在更新的小说，建议重新下载)')
-        col1,col2=st.columns(2)
-        with col1:
-            if st.button('直接下载'):
-                novel=open(f'.\{name_chinese}.txt','r',encoding='utf-8')
-                file=os.getcwd()
-                finally_file=os.path.join(file, f'{name_chinese}.txt')
-                st.write(f"小说已经下载完成，存放在{finally_file}")
-                st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
-                time_all_waste=0
-        with col2:
-            if st.button('重新下载'):
-                with open(f'.\{name_chinese}-1.txt','w',encoding='utf-8') as f:
-                    f.close()
-                download,time_all_waste,novel_class=novel_paqu_again(name)
+    if name_chinese=='曾文正':
+        #数据查看
+        data=pd.read_table('./user_data.txt',header=None,sep=',')
+        st.write(data)
     else:
-        download,time_all_waste,novel_class=novel_paqu(name)
-    #%%数据收集
-    user_data={
-         '登陆时间':[f'{time_login}'],
-         '搜索书名':[f'{name_chinese}'],
-         '下载总时长':[f'{time_all_waste}'],
-         '下载情况':[f'{download}'],
-         '所属类别':[f'{novel_class}']
-         }
-    data=pd.DataFrame(user_data)
-    st.dataframe(data)
-
-    #df=pd.read_excel('./用户数据.xlsx')
-    #df=df.append(user_data,ignore_index=True)
-    #df.to_excel('./用户数据.xlsx')
+        name=py.get(name_chinese,format='strip')
+        #已经获取到小说名字————先判断是否已经有了，有了的话可直接提供下载到本地，也可选择继续下载，建议继续下载
+        novel_list=os.listdir()
+        if f'.\{name_chinese}.txt' in novel_list:
+            # print('yes')
+            download=1
+            st.write('当前平台已收录此小说，是否选择直接下载(如果是正在更新的小说，建议重新下载)')
+            col1,col2=st.columns(2)
+            with col1:
+                if st.button('直接下载'):
+                    novel=open(f'.\{name_chinese}.txt','r',encoding='utf-8')
+                    file=os.getcwd()
+                    finally_file=os.path.join(file, f'{name_chinese}.txt')
+                    st.write(f"小说已经下载完成，存放在{finally_file}")
+                    st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
+                    time_all_waste=0
+                    novel_url=f'https://www.51shucheng.net/{name}'
+                    headers={
+                        'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
+                    resp=requests.get(novel_url,headers=headers)
+                    resp.encoding='utf_8'
+                    e=etree.HTML(resp.text)
+                #获取小说所属类别
+                    novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
+                    user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']
+                    data_load(user_data)
+            with col2:
+                if st.button('重新下载'):
+                    with open(f'.\{name_chinese}-1.txt','w',encoding='utf-8') as f:
+                        f.close()
+                    download,time_all_waste,novel_class=novel_paqu_again(name)
+                    user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']
+                    data_load(user_data)
+        else:
+            download,time_all_waste,novel_class=novel_paqu(name)
+            user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']
+            data_load(user_data)
+    
+        
+        
