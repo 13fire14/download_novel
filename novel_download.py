@@ -47,10 +47,11 @@ def novel_paqu(name):
         'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
     resp=requests.get(novel_url,headers=headers)
     resp.encoding='utf_8'
-    e=etree.HTML(resp.text)
-#获取小说所属类别
-    novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
+    
     try:
+        e=etree.HTML(resp.text)
+    #获取小说所属类别
+        novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
         url_all=re.findall('<li>.*<a href="(.*)" title=.*</a>',resp.text)
         url=url_all[0]
         st.subheader("当前书城中存在此小说，正在下载")
