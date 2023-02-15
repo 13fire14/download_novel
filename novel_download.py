@@ -20,7 +20,8 @@ for i in novel_list1:
     if 'requirements' not in i:
         if '.txt' in i:
             novel_chandle.append(i)
-            os.remove(os.path.join(file1, i))
+            #一键清除所有小说内存
+            #os.remove(os.path.join(file1, i))
 novel_chandle
 #%%编写爬取的函数
 def novel_paqu(name):
@@ -122,4 +123,4 @@ else:
                 novel_paqu_again(name)
     else:
         st.write('no')
-        #novel_paqu(name)
+        novel_paqu(name)
