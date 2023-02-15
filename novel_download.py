@@ -47,6 +47,9 @@ def novel_paqu(name):
         'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
     resp=requests.get(novel_url,headers=headers)
     resp.encoding='utf_8'
+    e=etree.HTML(resp.text)
+#获取小说所属类别
+    novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
     try:
         url_all=re.findall('<li>.*<a href="(.*)" title=.*</a>',resp.text)
         url=url_all[0]
@@ -86,7 +89,7 @@ def novel_paqu(name):
         st.write(f"当前书城并没有收录该小说,网址为{novel_url},可查看")
         st.write(download)
         time_all_waste=0
-    return download,time_all_waste
+    return download,time_all_waste,novel_class
 #%%重新下载
 def novel_paqu_again(name):
     time_now_all=time.time()
@@ -95,6 +98,10 @@ def novel_paqu_again(name):
         'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
     resp=requests.get(novel_url,headers=headers)
     resp.encoding='utf_8'
+    e=etree.HTML(resp.text)
+#获取小说所属类别
+    novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
+#获取小说第一章节网址
     url_all=re.findall('<li>.*<a href="(.*)" title=.*</a>',resp.text)
     url=url_all[0]
     for i in tqdm(range(len(url_all))):
@@ -126,12 +133,13 @@ def novel_paqu_again(name):
     novel=open(f'.\{name_chinese}-1.txt','r',encoding='utf-8')
     time_all_waste=round(time.time()-time_now_all,0)
     st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
-    return download,time_all_waste
+    return download,time_all_waste,novel_class
 #%%页面设置
 name_chinese=st.text_input('请输入小说名称')
 # name_chinese='天龙八部'
 download=1
 time_all_waste=0
+novel_class=''
 if name_chinese=='':
     st.write('积累的年代，就安然等待吧。不要焦虑，不要迷茫。时人不识凌云木，直待凌云始道高')
 else:
@@ -155,16 +163,16 @@ else:
             if st.button('重新下载'):
                 with open(f'.\{name_chinese}-1.txt','w',encoding='utf-8') as f:
                     f.close()
-                download,time_all_waste=novel_paqu_again(name)
+                download,time_all_waste,novel_class=novel_paqu_again(name)
     else:
-        download,time_all_waste=novel_paqu(name)
+        download,time_all_waste,novel_class=novel_paqu(name)
     #%%数据收集
     user_data={
          '登陆时间':[f'{time_login}'],
          '搜索书名':[f'{name_chinese}'],
          '下载总时长':[f'{time_all_waste}'],
          '下载情况':[f'{download}']
-         
+         '所属类别':[f'{novel_class}']
          }
     data=pd.DataFrame(user_data)
-    #st.dataframe(data)
+    st.dataframe(data)
