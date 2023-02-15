@@ -52,7 +52,7 @@ novel_list1=os.listdir()
 file1=os.getcwd()
 novel_chandle=[]
 for i in novel_list1:
-    if 'requirements'and'user_data' not in i:
+    if ('requirements'&'user_data') not in i:
         if '.txt' in i:
             novel_chandle.append(i)
             # os.remove(os.path.join(file1, i))
