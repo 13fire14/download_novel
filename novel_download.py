@@ -179,5 +179,6 @@ else:
     data=pd.DataFrame(user_data)
     st.dataframe(data)
 
-df=pd.read_excel('./用户数据.xlsx')
-st.write(df)
+    df=pd.read_excel('./用户数据.xlsx')
+    df=df.append(user_data,ignore_index=True)
+    df.to_excel('./用户数据.xlsx')
