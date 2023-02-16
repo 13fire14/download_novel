@@ -84,7 +84,7 @@ def novel_paqu(name,proxies):
         e=etree.HTML(resp.text)
     #获取小说所属类别
         novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
-        author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
+        #author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
         url_all=re.findall('<li>.*<a href="(.*)" title=.*</a>',resp.text)
         url=url_all[0]
         st.subheader("当前书城中存在此小说，正在下载")
@@ -124,8 +124,8 @@ def novel_paqu(name,proxies):
         st.write(download)
         time_all_waste=0
         novel_class=''
-        author=''
-    return download,time_all_waste,novel_class,author
+        #author=''
+    return download,time_all_waste,novel_class#,author
 #%%重新下载
 def novel_paqu_again(name,proxies):
     time_now_all=time.time()
@@ -140,7 +140,7 @@ def novel_paqu_again(name,proxies):
     e=etree.HTML(resp.text)
 #获取小说所属类别
     novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
-    author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
+    #author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
 #获取小说第一章节网址
     url_all=re.findall('<li>.*<a href="(.*)" title=.*</a>',resp.text)
     url=url_all[0]
@@ -173,14 +173,14 @@ def novel_paqu_again(name,proxies):
     novel=open(f'.\{name_chinese}-1.txt','r',encoding='utf-8')
     time_all_waste=round(time.time()-time_now_all,0)
     st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
-    return download,time_all_waste,novel_class,author
+    return download,time_all_waste,novel_class#,author
 #%%页面设置
 name_chinese=st.text_input('请输入小说名称')
 # name_chinese='天龙八部'
 download=1
 time_all_waste=0
 novel_class=''
-author=''
+#author=''
 proxy='36.57.71.15:46047'
 proxies={'https':'https://'+proxy}
 if name_chinese=='':
@@ -215,18 +215,18 @@ else:
                     e=etree.HTML(resp.text)
                 #获取小说所属类别
                     novel_class=e.xpath('/html/body/div[1]/div[3]/div[1]/div[1]/a[2]/@title')[0]
-                    author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
-                    user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}',f'{author}']
+                    #author=e.xpath('/html/body/div[1]/div[3]/div[2]/div[1]/a[2]/@title')[0]
+                    user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']#,f'{author}']
                     data_load(user_data)
             with col2:
                 if st.button('重新下载'):
                     with open(f'.\{name_chinese}-1.txt','w',encoding='utf-8') as f:
                         f.close()
                     download,time_all_waste,novel_class,author=novel_paqu_again(name,proxies)
-                    user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}',f'{author}']
+                    user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']#,f'{author}']
                     data_load(user_data)
         else:
             download,time_all_waste,novel_class,author=novel_paqu(name,proxies)
-            user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}',f'{author}']
+            user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']#,f'{author}']
             data_load(user_data)
     
