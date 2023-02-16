@@ -19,18 +19,10 @@ from tqdm import tqdm
 import os           #获取服务器的小说
 import pinyin as py#中文改为拼音
 import pandas as pd
-import socket
+
 st.set_page_config(page_title='小说免费下载平台')
 st.title('小说免费下载平台')
 # st.subheader("长篇小说需要一定的下载时间，请耐心等候")
-
-# 获取本机计算机名称
-hostname = socket.gethostname()
-# 获取本机ip
-ip = socket.gethostbyname(hostname)
-st.write(ip)
-st.write(requests.get('http://ifconfig.me/ip', timeout=1).text.strip())
-        
 #%%获取登陆时间
 import datetime
  
@@ -103,7 +95,7 @@ def novel_paqu(name):
             headers={
                 'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
             #发出请求访问
-            resp=requests.get(url,headers=headers)
+            resp=requests.get(url,headers=headers,proxies=proxies)
             #保证不乱码
             resp.encoding='utf_8'
             #打印网页源代码
@@ -119,9 +111,9 @@ def novel_paqu(name):
                 f.write(title+'\n\n'+info+'\n\n')
             time_waste=round(time.time()-time_now,0)
             st.sidebar.write(f'{i+1}/{len(url_all)}:{title},耗时{time_waste}秒')
-        file=os.getcwd()
-        finally_file=os.path.join(file, f'{name_chinese}.txt')
-        #st.write(f"小说已经下载完成，存放在{finally_file}")
+        # file=os.getcwd()
+        # finally_file=os.path.join(file, f'{name_chinese}.txt')
+        # #st.write(f"小说已经下载完成，存放在{finally_file}")
         novel=open(f'.\{name_chinese}.txt','r',encoding='utf-8')
         st.download_button('保存到本地',novel,file_name=f'{name_chinese}.txt')
         download=1
@@ -135,13 +127,15 @@ def novel_paqu(name):
         author=''
     return download,time_all_waste,novel_class,author
 #%%重新下载
-def novel_paqu_again(name):
+def novel_paqu_again(name,proxies):
     time_now_all=time.time()
     #name='liulangdiqiu'
     novel_url=f'https://www.51shucheng.net/{name}'
     headers={
         'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
-    resp=requests.get(novel_url,headers=headers)
+    
+    
+    resp=requests.get(novel_url,headers=headers,proxies=proxies)
     resp.encoding='utf_8'
     e=etree.HTML(resp.text)
 #获取小说所属类别
@@ -157,7 +151,7 @@ def novel_paqu_again(name):
         headers={
             'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
         #发出请求访问
-        resp=requests.get(url,headers=headers)
+        resp=requests.get(url,headers=headers,proxies=proxies)
         #保证不乱码
         resp.encoding='utf_8'
         #打印网页源代码
@@ -173,8 +167,8 @@ def novel_paqu_again(name):
             f.write(title+'\n\n'+info+'\n\n')
         time_waste=round(time.time()-time_now,0)
         st.sidebar.write(f'{i+1}/{len(url_all)}:{title},耗时{time_waste}秒')
-    file=os.getcwd()
-    finally_file=os.path.join(file, f'{name_chinese}-1.txt')
+    # file=os.getcwd()
+    # finally_file=os.path.join(file, f'{name_chinese}-1.txt')
     #st.write(f"小说已经下载完成，存放在{finally_file}")
     novel=open(f'.\{name_chinese}-1.txt','r',encoding='utf-8')
     time_all_waste=round(time.time()-time_now_all,0)
@@ -187,6 +181,8 @@ download=1
 time_all_waste=0
 novel_class=''
 author=''
+proxy='117.27.24.126:36082'
+proxies={'http':'http://'+proxy,"https":"https://"+proxy}
 if name_chinese=='':
     st.write('积累的年代，就安然等待吧。不要焦虑，不要迷茫。时人不识凌云木，直待凌云始道高')
 else:
@@ -214,7 +210,7 @@ else:
                     novel_url=f'https://www.51shucheng.net/{name}'
                     headers={
                         'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
-                    resp=requests.get(novel_url,headers=headers)
+                    resp=requests.get(novel_url,headers=headers,proxies=proxies)
                     resp.encoding='utf_8'
                     e=etree.HTML(resp.text)
                 #获取小说所属类别
@@ -226,13 +222,11 @@ else:
                 if st.button('重新下载'):
                     with open(f'.\{name_chinese}-1.txt','w',encoding='utf-8') as f:
                         f.close()
-                    download,time_all_waste,novel_class,author=novel_paqu_again(name)
+                    download,time_all_waste,novel_class,author=novel_paqu_again(name,proxies)
                     user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}',f'{author}']
                     data_load(user_data)
         else:
-            download,time_all_waste,novel_class,author=novel_paqu(name)
+            download,time_all_waste,novel_class,author=novel_paqu(name,proxies)
             user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}',f'{author}']
             data_load(user_data)
     
-        
-        
