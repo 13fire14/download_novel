@@ -181,8 +181,8 @@ download=1
 time_all_waste=0
 novel_class=''
 author=''
-proxy='117.27.24.126:36082'
-proxies={'http':'http://'+proxy}
+proxy='36.57.71.15:46047'
+proxies={'https':'https://'+proxy}
 if name_chinese=='':
     st.write('积累的年代，就安然等待吧。不要焦虑，不要迷茫。时人不识凌云木，直待凌云始道高')
 else:
