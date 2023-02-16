@@ -222,11 +222,11 @@ else:
                 if st.button('重新下载'):
                     with open(f'.\{name_chinese}-1.txt','w',encoding='utf-8') as f:
                         f.close()
-                    download,time_all_waste,novel_class,author=novel_paqu_again(name,proxies)
+                    download,time_all_waste,novel_class=novel_paqu_again(name,proxies)
                     user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']#,f'{author}']
                     data_load(user_data)
         else:
-            download,time_all_waste,novel_class,author=novel_paqu(name,proxies)
+            download,time_all_waste,novel_class=novel_paqu(name,proxies)
             user_data=[f'{pd.to_datetime(time_login)}',f'{name_chinese}',f'{time_all_waste}',f'{download}',f'{novel_class}']#,f'{author}']
             data_load(user_data)
     
