@@ -19,10 +19,17 @@ from tqdm import tqdm
 import os           #获取服务器的小说
 import pinyin as py#中文改为拼音
 import pandas as pd
-
+import socket
 st.set_page_config(page_title='小说免费下载平台')
 st.title('小说免费下载平台')
 # st.subheader("长篇小说需要一定的下载时间，请耐心等候")
+
+# 获取本机计算机名称
+hostname = socket.gethostname()
+# 获取本机ip
+ip = socket.gethostbyname(hostname)
+st.write(ip)
+        
 #%%获取登陆时间
 import datetime
  
