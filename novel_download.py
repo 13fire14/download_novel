@@ -29,6 +29,7 @@ hostname = socket.gethostname()
 # 获取本机ip
 ip = socket.gethostbyname(hostname)
 st.write(ip)
+st.write(requests.get('http://ifconfig.me/ip', timeout=1).text.strip())
         
 #%%获取登陆时间
 import datetime
