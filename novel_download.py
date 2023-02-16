@@ -71,13 +71,13 @@ st.sidebar.dataframe(novel_chandle)
 #             f.write(columns[j])
 #             f.write(',')
 # #%%编写爬取的函数
-def novel_paqu(name):
+def novel_paqu(name,proxies):
     #计算总的时间
     time_now_all=time.time()
     novel_url=f'https://www.51shucheng.net/{name}'
     headers={
         'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.41'}
-    resp=requests.get(novel_url,headers=headers)
+    resp=requests.get(novel_url,headers=headers,proxies=proxies)
     resp.encoding='utf_8'
     
     try:
